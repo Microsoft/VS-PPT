@@ -3,7 +3,7 @@
   <Metadata>
     <Identity Id="MatchMargin.Microsoft Corp..42825e7b-83aa-4d8e-9c5d-db53c7b6ff31" Version="1.0" Language="en-US" Publisher="David Pugh" />
     <DisplayName>Match Margin</DisplayName>
-    <Description xml:space="preserve">This extension draws matchs that match the word under the caret in the scroll bar and in the editor.</Description>
+    <Description xml:space="preserve">This extension draws matches that match the word under the caret in the scroll bar and in the editor.</Description>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0,15.0]" />
