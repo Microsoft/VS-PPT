@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.VisualStudio.PowerTools.MatchMargin</RootNamespace>
     <AssemblyName>Microsoft.VisualStudio.PowerTools.MatchMargin</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <FileUpgradeFlags>

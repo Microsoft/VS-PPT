@@ -1,17 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-  <Metadata>
-    <Identity Id="MatchMargin.Microsoft Corp..42825e7b-83aa-4d8e-9c5d-db53c7b6ff31" Version="1.0" Language="en-US" Publisher="David Pugh" />
-    <DisplayName>Match Margin</DisplayName>
-    <Description xml:space="preserve">This extension draws matchs that match the word under the caret in the scroll bar and in the editor.</Description>
-  </Metadata>
-  <Installation>
-    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0,15.0]" />
-  </Installation>
-  <Dependencies>
-    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.5" />
-  </Dependencies>
-  <Assets>
-    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
-  </Assets>
+    <Metadata>
+        <Identity Id="MatchMargin.Microsoft Corp..42825e7b-83aa-4d8e-9c5d-db53c7b6ff31" Version="1.0" Language="en-US" Publisher="David Pugh" />
+        <DisplayName>Match Margin</DisplayName>
+        <Description xml:space="preserve">This extension draws matchs that match the word under the caret in the scroll bar and in the editor.</Description>
+    </Metadata>
+    <Installation>
+        <InstallationTarget Version="[16.0,17.0)" Id="Microsoft.VisualStudio.Community" />
+    </Installation>
+    <Dependencies>
+        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.5" />
+    </Dependencies>
+    <Assets>
+        <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
+    </Assets>
+    <Prerequisites>
+        <Prerequisite DisplayName="Visual Studio extension development prerequisites" Version="[16.3.29230.54,17.0)" Id="Microsoft.VisualStudio.ComponentGroup.VisualStudioExtension.Prerequisites" />
+    </Prerequisites>
 </PackageManifest>

@@ -49,7 +49,7 @@ namespace Microsoft.VisualStudio.PowerTools.MatchMargin
         {
             this.DisplayName = Strings.MatchColor;
             this.ForegroundColor = Color.FromRgb(147, 112, 219);        //Color of the margin mark
-            this.BackgroundColor = Color.FromRgb(228, 219, 246);        //Color of the adornment
+            this.BackgroundColor = Color.FromRgb(103, 109, 91);        //Color of the adornment. Old: (228, 219, 246);
         }
     }
 
