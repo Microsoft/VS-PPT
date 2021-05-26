@@ -11,9 +11,11 @@ namespace Microsoft.VisualStudio.Editor.PeekF1
     {
         public void AugmentPeekSession(IPeekSession session, IList<IPeekableItem> peekableItems)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             if (session.RelationshipName == PeekHelpRelationship.Instance.Name)
             {
                 DTE dte = ServiceProvider.GlobalProvider.GetService(typeof(DTE)) as DTE;
+                Assumes.Present(dte);
                 var attributes = new Dictionary<string, string[]>(StringComparer.CurrentCultureIgnoreCase);
                 ExtractAttributes(dte.ActiveWindow.ContextAttributes, attributes);
                 ExtractAttributes(dte.ContextAttributes, attributes);
@@ -28,6 +30,7 @@ namespace Microsoft.VisualStudio.Editor.PeekF1
 
         private static void ExtractAttributes(ContextAttributes contextAttributes, Dictionary<string, string[]> attributes)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             try
             {
                 ExtractAttributes(contextAttributes.HighPriorityAttributes, attributes);

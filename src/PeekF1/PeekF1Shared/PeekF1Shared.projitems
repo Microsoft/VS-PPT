@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>404a4365-54c4-43bb-8fba-ec8611766aee</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>PeekF1Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ClippableWindowsFormsHost.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommandFilter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalSuppressions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HelpUrlBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NativeMethods.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PeekF1Package.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Peek\F1PeekableItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Peek\F1PeekableItemSource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Peek\F1PeekableItemSourceProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Peek\F1PeekPresentationControl.xaml.cs">
+      <DependentUpon>F1PeekPresentationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Peek\F1PeekResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Peek\F1PeekResultPresentation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Peek\F1PeekResultPresenter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Peek\F1PeekResultScrollState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Peek\F1PeekResultSource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Peek\PeekHelpRelationship.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Resources.Designer.cs">
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)TextViewCreationListener.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)VSPackage.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Peek\F1PeekPresentationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+</Project>

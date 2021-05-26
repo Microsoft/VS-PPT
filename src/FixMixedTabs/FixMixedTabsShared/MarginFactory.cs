@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.ExtensionManager;
-using Microsoft.VisualStudio.Shell;
+﻿using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Operations;
@@ -26,9 +25,6 @@ namespace FixMixedTabs
         [Import]
         private ITextUndoHistoryRegistry _UndoHistoryRegistry = null;
 
-        [Import]
-        private SVsServiceProvider _serviceProvider = null;
-
         public IWpfTextViewMargin CreateMargin(IWpfTextViewHost textViewHost, IWpfTextViewMargin containerMargin)
         {
             IWpfTextView view = textViewHost.TextView;
@@ -39,15 +35,6 @@ namespace FixMixedTabs
 
             ITextDocument document;
             if (!_TextDocumentFactoryService.TryGetTextDocument(view.TextDataModel.DocumentBuffer, out document))
-                return null;
-
-            IVsExtensionManager manager = _serviceProvider.GetService(typeof(SVsExtensionManager)) as IVsExtensionManager;
-            if (manager == null)
-                return null;
-
-            IInstalledExtension extension;
-            manager.TryGetInstalledExtension("FixMixedTabs", out extension);
-            if (extension != null)
                 return null;
 
             ITextUndoHistory history;

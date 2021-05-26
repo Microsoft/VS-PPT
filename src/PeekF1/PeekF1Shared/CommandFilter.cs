@@ -39,6 +39,7 @@ namespace Microsoft.VisualStudio.Editor.PeekF1
 
         public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
+            Shell.ThreadHelper.ThrowIfNotOnUIThread();
             if (pguidCmdGroup == PeekF1Package.PackageCmdSetGuid && nCmdID == PeekF1Package.PeekHelpCmdId)
             {
                 HandlePeekHelp();
@@ -81,6 +82,7 @@ namespace Microsoft.VisualStudio.Editor.PeekF1
 
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
+            Shell.ThreadHelper.ThrowIfNotOnUIThread();
             if (pguidCmdGroup == PeekF1Package.PackageCmdSetGuid && cCmds == 1)
             {
                 if (prgCmds[0].cmdID == PeekF1Package.PeekHelpCmdId)

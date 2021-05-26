@@ -14,6 +14,7 @@ namespace Microsoft.VisualStudio.Editor.PeekF1
 
         public static string Build(Dictionary<string, string[]> attributes)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             StringBuilder sb = new StringBuilder();
             sb.Append(HelpUrlPrefix);
 

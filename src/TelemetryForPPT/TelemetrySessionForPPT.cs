@@ -26,6 +26,7 @@ namespace Microsoft.VisualStudio.TelemetryForPPT
         {
             get
             {
+                ThreadHelper.ThrowIfNotOnUIThread();
                 if (_telemetrySessionFactory == null)
                 {
                     IComponentModel componentModel = ServiceProvider.GlobalProvider.GetService(typeof(SComponentModel)) as IComponentModel;
@@ -57,6 +58,7 @@ namespace Microsoft.VisualStudio.TelemetryForPPT
 
         public static ITelemetrySession Create(Assembly callingAssembly)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             return s_instance.TelemetrySessionFactory.CreateSession(callingAssembly);
         }
     }

@@ -1,12 +1,14 @@
 ﻿using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Threading;
 using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.VisualStudio.Editor.PeekF1
 {
@@ -94,8 +96,11 @@ namespace Microsoft.VisualStudio.Editor.PeekF1
         {
             if (_control != null)
             {
-                _control.Dispatcher.BeginInvoke((Action)(() => _control.WinFormsHost.HandleLayoutChanged(_textView)),
-                    priority: DispatcherPriority.Background);
+                ThreadHelper.JoinableTaskFactory.WithPriority(_control.Dispatcher, DispatcherPriority.Background).RunAsync(async () =>
+                {
+                    await Task.Yield();
+                    _control.WinFormsHost.HandleLayoutChanged(_textView);
+                });
             }
         }
 
@@ -128,7 +133,12 @@ namespace Microsoft.VisualStudio.Editor.PeekF1
             if (string.IsNullOrEmpty(e.Url.Fragment) && e.Url.Host != null && e.Url.Host.EndsWith("msdn.microsoft.com"))
             {
                 e.Cancel = true;
-                ThreadHelper.Generic.InvokeAsync(() => _browser.Navigate(e.Url.AbsoluteUri + "#content"));
+
+                ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+                {
+                    await Task.Yield();
+                    _browser.Navigate(e.Url.AbsoluteUri + "#content");
+                });
             }
         }
 
