@@ -22,7 +22,7 @@ namespace Microsoft.VisualStudio.Editor.PeekF1
             {
                 if (_presentation.Browser != null)
                 {
-                    return _presentation.Browser.Url;
+                    return _presentation.Browser.Source;
                 }
                 return null;
             }
