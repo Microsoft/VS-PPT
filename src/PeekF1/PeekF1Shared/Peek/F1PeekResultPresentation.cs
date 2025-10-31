@@ -1,9 +1,10 @@
-﻿using Microsoft.VisualStudio.Language.Intellisense;
+using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Threading;
 using System;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -53,7 +54,7 @@ namespace Microsoft.VisualStudio.Editor.PeekF1
             }
         }
 
-        public System.Windows.Forms.WebBrowser Browser
+        public Microsoft.Web.WebView2.WinForms.WebView2 Browser
         {
             get
             {
@@ -82,12 +83,22 @@ namespace Microsoft.VisualStudio.Editor.PeekF1
             _control = new F1PeekPresentationControl();
             _control.DataContext = this;
 
-            _browser = new System.Windows.Forms.WebBrowser();
-            _browser.Url = _helpUri;
+            _browser = new Microsoft.Web.WebView2.WinForms.WebView2();
             _control.WinFormsHost.Child = _browser;
 
-            _browser.DocumentCompleted += Browser_DocumentCompleted;
-            _browser.Navigating += Browser_Navigating;
+            _browser.NavigationCompleted += Browser_NavigationCompleted;
+            _browser.NavigationStarting += Browser_NavigationStarting;
+
+            ThreadHelper.JoinableTaskFactory.WithPriority(_control.Dispatcher, DispatcherPriority.Background).RunAsync(async () =>
+            {
+                await Task.Yield();
+
+                string userDataFolder = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), "VS-PPT-Peek-WV2");
+                Microsoft.Web.WebView2.Core.CoreWebView2Environment environment = await Microsoft.Web.WebView2.Core.CoreWebView2Environment.CreateAsync(userDataFolder: userDataFolder);
+                await _browser.EnsureCoreWebView2Async(environment);
+                _browser.CoreWebView2.Settings.AreDevToolsEnabled = false;
+                _browser.Source = _helpUri;
+            });
 
             return _control;
         }
@@ -118,27 +129,33 @@ namespace Microsoft.VisualStudio.Editor.PeekF1
             }
         }
 
-        private void Browser_DocumentCompleted(object sender, System.Windows.Forms.WebBrowserDocumentCompletedEventArgs e)
+        private void Browser_NavigationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs e)
         {
-            _browser.DocumentCompleted -= Browser_DocumentCompleted;
+            _browser.NavigationCompleted -= Browser_NavigationCompleted;
 
             _control.ProgressBar.Visibility = Visibility.Collapsed;
             Keyboard.Focus(_control.PresentationRoot);
 
-            _browser.Document.Focusing += Document_Focusing;
+            _browser.GotFocus += Browser_GotFocus;
         }
 
-        private void Browser_Navigating(object sender, System.Windows.Forms.WebBrowserNavigatingEventArgs e)
+        private void Browser_NavigationStarting(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs e)
         {
-            if (string.IsNullOrEmpty(e.Url.Fragment) && e.Url.Host != null && e.Url.Host.EndsWith("msdn.microsoft.com"))
+            UriBuilder uri = new UriBuilder(e.Uri);
+            if (uri.Host != null)
             {
-                e.Cancel = true;
-
-                ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+                bool isMsdn = uri.Host.EndsWith("msdn.microsoft.com");
+                if ((isMsdn && string.IsNullOrEmpty(uri.Fragment)) || (uri.Host.EndsWith("learn.microsoft.com") && uri.Fragment == "#content"))
                 {
-                    await Task.Yield();
-                    _browser.Navigate(e.Url.AbsoluteUri + "#content");
-                });
+                    e.Cancel = true;
+
+                    ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+                    {
+                        await Task.Yield();
+                        uri.Fragment = isMsdn ? "content" : "article-header";
+                        _browser.Source = uri.Uri;
+                    });
+                }
             }
         }
 
@@ -151,7 +168,7 @@ namespace Microsoft.VisualStudio.Editor.PeekF1
             }
         }
 
-        private void Document_Focusing(object sender, System.Windows.Forms.HtmlElementEventArgs e)
+        private void Browser_GotFocus(object sender, EventArgs e)
         {
             SendFocusToPeek();
         }
@@ -191,12 +208,9 @@ namespace Microsoft.VisualStudio.Editor.PeekF1
         {
             if (_browser != null)
             {
-                _browser.DocumentCompleted -= Browser_DocumentCompleted;
-                _browser.Navigating -= Browser_Navigating;
-                if (_browser.Document != null)
-                {
-                    _browser.Document.Focusing -= Document_Focusing;
-                }
+                _browser.NavigationCompleted -= Browser_NavigationCompleted;
+                _browser.NavigationStarting -= Browser_NavigationStarting;
+                _browser.GotFocus -= Browser_GotFocus;
 
                 _browser.Dispose();
             }
@@ -230,7 +244,7 @@ namespace Microsoft.VisualStudio.Editor.PeekF1
 
 #pragma warning disable 0067
         public event EventHandler IsReadOnlyChanged;
-        private System.Windows.Forms.WebBrowser _browser;
+        private Microsoft.Web.WebView2.WinForms.WebView2 _browser;
 #pragma warning restore 0067
 
         event EventHandler<RecreateContentEventArgs> IPeekResultPresentation.RecreateContent

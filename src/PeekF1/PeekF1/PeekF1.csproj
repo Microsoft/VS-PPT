@@ -32,6 +32,9 @@
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.9.31025.194" />
     <PackageReference Include="Microsoft.Internal.VisualStudio.Shell.Interop.14.0.DesignTime" Version="16.9.31213.332" />
     <PackageReference Include="Microsoft.VisualStudio.Shell.15.0" Version="16.9.31025.104" />
+    <PackageReference Include="Microsoft.Web.WebView2">
+      <Version>1.0.3537.50</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
